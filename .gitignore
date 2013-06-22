@@ -1,0 +1,9 @@
+*~
+*.bak
+*.pyc
+*.diff
+*.patch
+*#
+__pycache__
+.project
+.pydevproject
