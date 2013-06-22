@@ -20,3 +20,23 @@ print('''
                       Realtime MIDI modification
              ]]]
 ''')
+import argparse
+
+VERSION = 'v0.0.0b0pre'
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--license', action='store_true',
+                    help='Display the Midifire license and exit')
+parser.add_argument('--version', '-V', action='store_true',
+                    help='Display Midifire\'s version and exit')
+args = parser.parse_args()
+
+if args.license:
+    print('Midifire is licensed under the GNU GPL v3 or (at your option),')
+    print('any later version. For a copy of the license, please see the')
+    print('LICENSE file included with this software')
+    exit()
+
+if args.version:
+    print('Midifire ', VERSION)
+    exit()
