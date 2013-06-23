@@ -40,3 +40,31 @@ if args.license:
 if args.version:
     print('Midifire ', VERSION)
     exit()
+
+if __name__ == '__main__':
+    print('[*] Creating connection graph')
+    import libs.graph
+
+    print('[*] Creating MIDI input device')
+    import libs.input.midi
+    indev = libs.input.midi.Input()
+    print('[*] Possible ports for input:')
+    print(indev.list_devices())
+    indevnum = input(' Enter device number: ')
+    indev.set_device(int(indevnum))
+
+    print('[*] Creating MIDI output device')
+    import libs.output.midi
+    outdev = libs.output.midi.Output()
+    print('[*] Possible ports for output:')
+    print(outdev.list_devices())
+    outdevnum = input(' Enter device number: ')
+    outdev.set_device(int(outdevnum))
+
+    indev.outputs['main'] = outdev
+
+    print('[*] Setup complete')
+    print('    Entering wait loop')
+    import time
+    while True:
+        time.sleep(1)

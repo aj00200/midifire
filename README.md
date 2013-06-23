@@ -10,6 +10,8 @@ Midifire allows just about any type of modification you can think of. Here is a 
 * Smooth shaky input from touch-surface controllers
 * Switch between relative and absolute control
 * Allow for some controls to be dropped (for example, some bugs exist which cause keyboard pedals to be interpreted as musical notes)
+* Allow one control to trigger the same commands as other for software which limits the number of attached controls
+* Allow one control to act as multiple controls for software that does not allow one control to have multiple effects
 * GUI interface to provide additional options such as graphical control of the MIDI inputs and outputs as well as the applied modifiers.
 
 ## Hacking
