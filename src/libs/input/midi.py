@@ -19,6 +19,7 @@ class Input(libs.input.Input):
         Callback for rtmidi.MidiIn events.
         '''
         event = libs.events.MIDIEvent(event)
+        print('Input: %s' % event.data)
 
         # Forward the event to outputs
         self.process_event(event)

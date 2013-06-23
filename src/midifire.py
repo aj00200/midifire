@@ -42,9 +42,7 @@ if args.version:
     exit()
 
 if __name__ == '__main__':
-    print('[*] Creating connection graph')
-    import libs.graph
-
+    # Create input device
     print('[*] Creating MIDI input device')
     import libs.input.midi
     indev = libs.input.midi.Input()
@@ -53,6 +51,7 @@ if __name__ == '__main__':
     indevnum = input(' Enter device number: ')
     indev.set_device(int(indevnum))
 
+    # Create output device
     print('[*] Creating MIDI output device')
     import libs.output.midi
     outdev = libs.output.midi.Output()
@@ -61,7 +60,21 @@ if __name__ == '__main__':
     outdevnum = input(' Enter device number: ')
     outdev.set_device(int(outdevnum))
 
-    indev.outputs['main'] = outdev
+    # Create splitter
+    print('[*] Creating splitter')
+    import libs.modifiers.splitters
+    splitter = libs.modifiers.splitters.Copy()
+
+    # Create merger
+    print('[*] Creating merger')
+    import libs.modifiers.mergers
+    merger = libs.modifiers.mergers.SimpleMerge()
+
+    # Link devices for splitter demo
+    indev.outputs['main'] = splitter
+    splitter.outputs['copy'].append(merger)
+    splitter.outputs['copy'].append(merger)
+    merger.outputs['main'] = outdev
 
     print('[*] Setup complete')
     print('    Entering wait loop')
