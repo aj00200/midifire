@@ -42,39 +42,43 @@ if args.version:
     exit()
 
 if __name__ == '__main__':
-    # Create input device
-    print('[*] Creating MIDI input device')
     import libs.input.midi
+    import libs.output.midi
+
+    # Create virtual devices
+    # Create virtual input device
+    print('[*] Creating graph from a virtual port to device')
+    print('[*] Creating virtual MIDI input')
+    virtin = libs.input.midi.VirtualInput()
+    virtin.set_device(0)
+
+    # Create virtual output device
+    print('[*] Creating MIDI output device')
+    virtout = libs.output.midi.VirtualOutput()
+    virtout.set_device(0)
+
+    # Connect to input device
+    print('[*] Creating graph from device to a virtual port')
+    print('[*] Creating MIDI input device')
     indev = libs.input.midi.Input()
     print('[*] Possible ports for input:')
     print(indev.list_devices())
     indevnum = input(' Enter device number: ')
     indev.set_device(int(indevnum))
 
-    # Create output device
+    # Connect to output device
     print('[*] Creating MIDI output device')
-    import libs.output.midi
     outdev = libs.output.midi.Output()
     print('[*] Possible ports for output:')
     print(outdev.list_devices())
     outdevnum = input(' Enter device number: ')
     outdev.set_device(int(outdevnum))
 
-    # Create splitter
-    print('[*] Creating splitter')
-    import libs.modifiers.splitters
-    splitter = libs.modifiers.splitters.Copy()
+    # Link input device to virtual output device
+    indev.outputs['main'] = virtout
 
-    # Create merger
-    print('[*] Creating merger')
-    import libs.modifiers.mergers
-    merger = libs.modifiers.mergers.SimpleMerge()
-
-    # Link devices for splitter demo
-    indev.outputs['main'] = splitter
-    splitter.outputs['copy'].append(merger)
-    splitter.outputs['copy'].append(merger)
-    merger.outputs['main'] = outdev
+    # Link virtual input to output device
+    virtin.outputs['main'] = outdev
 
     print('[*] Setup complete')
     print('    Entering wait loop')

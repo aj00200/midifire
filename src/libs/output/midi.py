@@ -7,16 +7,8 @@ import libs.output
 
 class Output(libs.output.Output):
     def __init__(self):
-        self.inputs = {
-            'main': None
-        }
-        self.outputs = {}
+        super().__init__()
         self.midiout = rtmidi.MidiOut()
-
-    def callback(self, event):
-        '''
-        Callback for rtmidi.MidiIn events.
-        '''
 
     def list_devices(self):
         '''
@@ -32,7 +24,37 @@ class Output(libs.output.Output):
 
     def process_event(self, event):
         '''
-        Process an incomming MIDI event, passing it to self.midiout
+        Process an incoming MIDI event, passing it to self.midiout
         '''
         print('Output: %s' % event.data)
+        self.midiout.send_message(event.data)
+
+
+class VirtualOutput(libs.output.Output):
+    '''
+    Creates a virtual MIDI output on the system which other programs
+    can connect to as if it is a normal controller.
+    '''
+    def __init__(self):
+        super().__init__()
+        self.midiout = rtmidi.MidiOut()
+
+    def list_devices(self):
+        '''
+        List the option of creating a virtual device.
+        '''
+        return ['New Virtual Output']
+
+    def set_device(self, devicenum):
+        '''
+        Create a virtual device if devicenum is zero.
+        '''
+        if devicenum == 0:
+            self.midiout.open_virtual_port(name=b'Midifire Virtual Port')
+
+    def process_event(self, event):
+        '''
+        Process an incoming MIDI event, passing it to self.midiout
+        '''
+        print('Virtual Output: %s' % event.data)
         self.midiout.send_message(event.data)
