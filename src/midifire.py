@@ -45,18 +45,6 @@ if __name__ == '__main__':
     import libs.input.midi
     import libs.output.midi
 
-    # Create virtual devices
-    # Create virtual input device
-    print('[*] Creating graph from a virtual port to device')
-    print('[*] Creating virtual MIDI input')
-    virtin = libs.input.midi.VirtualInput()
-    virtin.set_device(0)
-
-    # Create virtual output device
-    print('[*] Creating MIDI output device')
-    virtout = libs.output.midi.VirtualOutput()
-    virtout.set_device(0)
-
     # Connect to input device
     print('[*] Creating graph from device to a virtual port')
     print('[*] Creating MIDI input device')
@@ -66,20 +54,19 @@ if __name__ == '__main__':
     indevnum = input(' Enter device number: ')
     indev.set_device(int(indevnum))
 
-    # Connect to output device
+    # Create null virtual input
+    virtin = libs.input.midi.VirtualInput()
+    virtin.set_device(0)
+
+    # Create virtual output device
     print('[*] Creating MIDI output device')
-    outdev = libs.output.midi.Output()
-    print('[*] Possible ports for output:')
-    print(outdev.list_devices())
-    outdevnum = input(' Enter device number: ')
-    outdev.set_device(int(outdevnum))
+    virtout = libs.output.midi.VirtualOutput()
+    virtout.set_device(0)
 
     # Link input device to virtual output device
     indev.outputs['main'] = virtout
 
-    # Link virtual input to output device
-    virtin.outputs['main'] = outdev
-
+    # Enter wait loop
     print('[*] Setup complete')
     print('    Entering wait loop')
     import time
