@@ -22,7 +22,7 @@ print('''
 ''')
 import argparse
 
-VERSION = 'v0.0.0b0pre'
+VERSION = 'v0.0.1'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--license', action='store_true',
