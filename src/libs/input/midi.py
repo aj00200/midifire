@@ -35,6 +35,35 @@ class Input(libs.input.Input):
         self.midiin.set_callback(self.callback)
 
 
+class SynchronousInput(libs.input.Input):
+    '''
+    Make an input call to self.midiin.get_message() and process it.
+    This method requires polling for new MIDI events.
+    '''
+    def __init__(self):
+        super().__init__()
+        self.midiin = rtmidi.MidiIn()
+
+    def process_event(self, event):
+        if isinstance(event, libs.events.TimeEvent):
+            data = self.midiin.get_message()
+            if data:
+                new_event = libs.events.MIDIEvent(data)
+                super().process_event(new_event)
+
+    def list_devices(self):
+        '''
+        Get a list of devices which this input can bind to.
+        '''
+        return self.midiin.get_ports()
+
+    def set_device(self, devicenum):
+        '''
+        Attach this input to an actual port.
+        '''
+        self.midiin.open_port(devicenum)
+
+
 class VirtualInput(libs.input.Input):
     '''
     Creates a virtual MIDI input on the system which other programs

@@ -26,7 +26,7 @@ class Output(libs.output.Output):
         '''
         Process an incoming MIDI event, passing it to self.midiout
         '''
-        print('Output: %s' % event.data)
+        print('Output: %s' % str(event.data))
         self.midiout.send_message(event.data)
 
 
@@ -56,5 +56,5 @@ class VirtualOutput(libs.output.Output):
         '''
         Process an incoming MIDI event, passing it to self.midiout
         '''
-        print('Virtual Output: %s' % event.data)
+        print('Virtual Output: %s' % str(event.data))
         self.midiout.send_message(event.data)
