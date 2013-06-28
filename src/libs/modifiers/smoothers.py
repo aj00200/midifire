@@ -18,9 +18,12 @@ class SimpleSmoother(libs.modifiers.Modifier):
     def process_event(self, event):
         '''
         Check self.memory to see if an event of this type has already
-        occured. If it has, average the previous inputs and move on.
+        occurred. If it has, average the previous inputs and move on.
         If not, create a new entry for it and move on.
         '''
+        if len(event.data) != 3:
+            self.process_event(event)
+
         if event.data[0] in self.memory:
             if event.data[1] in self.memory[event.data[0]]:
                 self.memory[event.data[0]][event.data[1]].append(event.data[2])
@@ -32,8 +35,8 @@ class SimpleSmoother(libs.modifiers.Modifier):
                 for value in self.memory[event.data[0]][event.data[1]]:
                     value_sum += value
                     total_values += 1
-                new = value_sum / total_values
-                modevent = libs.events.Event(event.data[0], event.data[1], new)
+                new = (event.data[0], event.data[1], value_sum / total_values)
+                modevent = libs.events.MIDIEvent((new, event.timing))
                 super().process_event(modevent)  # Pass the modified event
 
             else:
