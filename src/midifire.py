@@ -74,6 +74,6 @@ if __name__ == '__main__':
     print('    Entering wait loop')
     import time
     while True:
-        timed_event = libs.events.TimeEvent(0.01)
+        timed_event = libs.events.TimeEvent(0.001)
         indev.process_event(timed_event)
-        time.sleep(0.01)
+        time.sleep(0.001)
