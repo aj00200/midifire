@@ -21,6 +21,7 @@ print('''
              ]]]
 ''')
 import argparse
+import libs.events
 
 VERSION = 'v0.0.0b0pre'
 
@@ -44,31 +45,35 @@ if args.version:
 if __name__ == '__main__':
     import libs.input.midi
     import libs.output.midi
+    import libs.modifiers.smoothers
 
     # Connect to input device
     print('[*] Creating graph from device to a virtual port')
     print('[*] Creating MIDI input device')
-    indev = libs.input.midi.Input()
+    indev = libs.input.midi.SynchronousInput()
     print('[*] Possible ports for input:')
     print(indev.list_devices())
     indevnum = input(' Enter device number: ')
     indev.set_device(int(indevnum))
-
-    # Create null virtual input
-    virtin = libs.input.midi.VirtualInput()
-    virtin.set_device(0)
 
     # Create virtual output device
     print('[*] Creating MIDI output device')
     virtout = libs.output.midi.VirtualOutput()
     virtout.set_device(0)
 
+    # Create smoother modifier
+    print('[*] Creating smoother modifier')
+    smoother = libs.modifiers.smoothers.SimpleSmoother()
+
     # Link input device to virtual output device
-    indev.outputs['main'] = virtout
+    indev.outputs['main'] = smoother
+    smoother.outputs['main'] = virtout
 
     # Enter wait loop
     print('[*] Setup complete')
     print('    Entering wait loop')
     import time
     while True:
-        time.sleep(1)
+        timed_event = libs.events.TimeEvent(0.01)
+        indev.process_event(timed_event)
+        time.sleep(0.01)
