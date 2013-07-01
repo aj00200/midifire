@@ -16,7 +16,7 @@ class MIDIEvent(Event):
     '''
     def __init__(self, data):
         self.data = data[0]
-        self.timing = data[0]
+        self.timing = data[1]
 
 
 class TimeEvent(Event):
