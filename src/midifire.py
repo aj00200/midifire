@@ -46,6 +46,7 @@ if __name__ == '__main__':
     import libs.input.midi
     import libs.output.midi
     import libs.modifiers.smoothers
+    import libs.modifiers.limits
 
     # Connect to input device
     print('[*] Creating graph from device to a virtual port')
@@ -65,9 +66,14 @@ if __name__ == '__main__':
     print('[*] Creating smoother modifier')
     smoother = libs.modifiers.smoothers.SimpleSmoother()
 
+    # Create limiter modifier
+    print('[*] Creating limiter modifier')
+    limiter = libs.modifiers.limits.BasicLimit()
+
     # Link input device to virtual output device
     indev.outputs['main'] = smoother
-    smoother.outputs['main'] = virtout
+    smoother.outputs['main'] = limiter
+    limiter.outputs['main'] = virtout
 
     # Enter wait loop
     print('[*] Setup complete')
