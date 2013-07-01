@@ -6,8 +6,8 @@ import libs.modifiers
 
 
 class BasicLimit(libs.modifiers.Modifier):
-    minimum = 0
-    maximum = 127
+    minimum = 10
+    maximum = 120
 
     def process_event(self, event):
         if len(event.data) < 3:
@@ -19,10 +19,12 @@ class BasicLimit(libs.modifiers.Modifier):
 
         if val > self.maximum:
             val = self.maximum
-            newev = libs.events.MIDIEvent((event.data[0], event.data[1], val))
+            new = (event.data[0], event.data[1], val)
+            newev = libs.events.MIDIEvent((new, event.timing))
         elif val < self.minimum:
             val = self.minimum
-            newev = libs.events.MIDIEvent((event.data[0], event.data[1], val))
+            new = (event.data[0], event.data[1], val)
+            newev = libs.events.MIDIEvent((new, event.timing))
 
         if newev:
             super().process_event(newev)
