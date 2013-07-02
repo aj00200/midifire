@@ -48,6 +48,8 @@ class SynchronousInput(libs.input.Input):
         if isinstance(event, libs.events.TimeEvent):
             data = self.midiin.get_message()
             if data:
+                print('Input: %s' % str(data))
+            if data:
                 new_event = libs.events.MIDIEvent(data)
                 super().process_event(new_event)
 

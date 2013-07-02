@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     # Create limiter modifier
     print('[*] Creating limiter modifier')
-    limiter = libs.modifiers.limits.BasicLimit()
+    limiter = libs.modifiers.limits.SpeedLimiter()
 
     # Link input device to virtual output device
     indev.outputs['main'] = smoother
